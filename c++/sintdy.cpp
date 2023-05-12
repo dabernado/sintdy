@@ -59,7 +59,14 @@ void sintdy(
     dky[i] = c*yh[i][l];
   }
 
-  if (k == nq) { goto L1; }
+  if (k == nq) {
+    float r = pow(h, -k);
+    for (int i = 0; i < n; i++) {
+      dky[i] = r * dky[i];
+    }
+
+    return;
+  }
 
   int jb2 = nq - k;
   for (int jb = 1; jb < jb2; jb++) {
@@ -84,7 +91,6 @@ void sintdy(
 
   if (k == 0) { return; }
   
-L1:
   float r = pow(h, -k);
   for (int i = 0; i < n; i++) {
     dky[i] = r * dky[i];
