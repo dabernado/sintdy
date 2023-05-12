@@ -62,16 +62,18 @@ void sintdy(
 
   if (k == nq) {
     float r = pow(h, -k);
-    if ((n % 4) == 0) {
+    //if ((n % 4) == 0) {
       for (int i = 0; i < n; i+4) {
         float32x4_t dky_v = vld1q_f32(dky+i);
         vst1q_f32(dky+i, vmulq_n_f32(dky_v, r));
       }
+      /*
     } else {
       for (int i = 0; i < n; i++) {
 	dky[i] = r * dky[i];
       }
     }
+    */
 
     return;
   }
@@ -100,16 +102,18 @@ void sintdy(
   if (k == 0) { return; }
   
   float r = pow(h, -k);
-  if ((n % 4) == 0) {
+  //if ((n % 4) == 0) {
     for (int i = 0; i < n; i+4) {
       float32x4_t dky_v = vld1q_f32(dky+i);
       vst1q_f32(dky+i, vmulq_n_f32(dky_v, r));
     }
+    /*
   } else {
     for (int i = 0; i < n; i++) {
       dky[i] = r * dky[i];
     }
   }
+  */
 
   return;
 }
@@ -143,8 +147,8 @@ int main() {
   // print dky
   std::cout << "\nDKY[0] = " << dky[0]
     << "\nDKY[1] = " << dky[1]
-    << "\nDKY[2] = " << dky[2]
-    << "\nDKY[3] = " << dky[3];
+    << "\nDKY[2] = " << dky[2];
+    //<< "\nDKY[3] = " << dky[3];
 
   return 0;
 }
