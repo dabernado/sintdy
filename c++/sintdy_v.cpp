@@ -21,7 +21,7 @@ float rumach() {
 
 void sintdy(
     float t, int n, int k,
-    float** yh, float* dky,
+    float yh[4][2], float* dky,
     float h, float hu, float tn,
     int nyh, int iflag,
     int nq, int l
@@ -62,18 +62,10 @@ void sintdy(
 
   if (k == nq) {
     float r = pow(h, -k);
-    //if ((n % 4) == 0) {
-      for (int i = 0; i < n; i+4) {
-        float32x4_t dky_v = vld1q_f32(dky+i);
-        vst1q_f32(dky+i, vmulq_n_f32(dky_v, r));
-      }
-      /*
-    } else {
-      for (int i = 0; i < n; i++) {
-	dky[i] = r * dky[i];
-      }
+    for (int i = 0; i < n; i+=4) {
+      float32x4_t dky_v = vld1q_f32(dky+i);
+      vst1q_f32(dky+i, vmulq_n_f32(dky_v, r));
     }
-    */
 
     return;
   }
@@ -102,18 +94,10 @@ void sintdy(
   if (k == 0) { return; }
   
   float r = pow(h, -k);
-  //if ((n % 4) == 0) {
-    for (int i = 0; i < n; i+4) {
-      float32x4_t dky_v = vld1q_f32(dky+i);
-      vst1q_f32(dky+i, vmulq_n_f32(dky_v, r));
-    }
-    /*
-  } else {
-    for (int i = 0; i < n; i++) {
-      dky[i] = r * dky[i];
-    }
+  for (int i = 0; i < n; i+=4) {
+    float32x4_t dky_v = vld1q_f32(dky+i);
+    vst1q_f32(dky+i, vmulq_n_f32(dky_v, r));
   }
-  */
 
   return;
 }
@@ -121,8 +105,7 @@ void sintdy(
 int main() {
   // initialize arguments
   int k = 2;
-  //int n = 4;
-  int n = 3;
+  int n = 4;
   int l = 2;
   int nq = 4;
   int nyh = n;
@@ -131,24 +114,24 @@ int main() {
   float tn = t;
   float h = 1.0e0;
   float hu = 0.0e0;
-  float dky[n] = {1.0, 0.0, 0.0/*, 0.0*/};
-  float** yh;
+  float dky[n] = {1.0, 0.0, 0.0, 0.0};
+  float yh[4][2];
   yh[0][0] = 1.0;
   yh[0][1] = 0.0;
   yh[1][0] = 0.0;
   yh[1][1] = 1.0;
   yh[2][0] = 1.0;
   yh[2][1] = 1.0;
-  //yh[3][0] = 0.0;
-  //yh[3][1] = 0.0;
+  yh[3][0] = 0.0;
+  yh[3][1] = 0.0;
 
   sintdy(t, n, k, yh, dky, h, hu, tn, nyh, iflag, nq, l);
 
   // print dky
   std::cout << "\nDKY[0] = " << dky[0]
     << "\nDKY[1] = " << dky[1]
-    << "\nDKY[2] = " << dky[2];
-    //<< "\nDKY[3] = " << dky[3];
+    << "\nDKY[2] = " << dky[2]
+    << "\nDKY[3] = " << dky[3];
 
   return 0;
 }

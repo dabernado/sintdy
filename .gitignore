@@ -4,3 +4,4 @@ fortran/odepack
 fortran/example
 fortran/example.o
 *.swp
+*.swo
