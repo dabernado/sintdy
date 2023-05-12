@@ -86,8 +86,14 @@ void sintdy(
 
     c = ic;
 
-    for (int i = 0; i < n; i++) {
-      dky[i] = c*yh[i][jp1] + s*dky[i];
+    for (int i = 0; i < n; i+=4) {
+      float32x4_t dky_v = vld1q_f32(dky+i);
+      vst1q_f32(dky+i, vmulq_n_f32(dky_v, s));
+
+      dky[i] = c*yh[i][jp1];
+      dky[i+1] = c*yh[i+1][jp1];
+      dky[i+2] = c*yh[i+2][jp1];
+      dky[i+3] = c*yh[i+3][jp1];
     }
   }
 
