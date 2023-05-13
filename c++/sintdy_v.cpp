@@ -90,10 +90,10 @@ void sintdy(
       float32x4_t dky_v = vld1q_f32(dky+i);
       vst1q_f32(dky+i, vmulq_n_f32(dky_v, s));
 
-      dky[i] = c*yh[i][jp1];
-      dky[i+1] = c*yh[i+1][jp1];
-      dky[i+2] = c*yh[i+2][jp1];
-      dky[i+3] = c*yh[i+3][jp1];
+      dky[i] += c*yh[i][jp1];
+      dky[i+1] += c*yh[i+1][jp1];
+      dky[i+2] += c*yh[i+2][jp1];
+      dky[i+3] += c*yh[i+3][jp1];
     }
   }
 
