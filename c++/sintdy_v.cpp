@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <math.h>
-#include <arm_neon.h>
+#include <immintrin.h>
 
 float rumach() {
   float comp = 0.0e0;
@@ -63,8 +63,11 @@ void sintdy(
   if (k == nq) {
     float r = pow(h, -k);
     for (int i = 0; i < n; i+=4) {
-      float32x4_t dky_v = vld1q_f32(dky+i);
-      vst1q_f32(dky+i, vmulq_n_f32(dky_v, r));
+      __m128 dky_v = _mm_load_ps(dky+i);
+      _mm_store_ps(
+          dky+i,
+          _mm_mul_ps(dky_v, _mm_set_ps(r, r, r, r))
+          );
     }
 
     return;
@@ -87,10 +90,11 @@ void sintdy(
     c = ic;
 
     for (int i = 0; i < n; i+=4) {
-      float32x4_t dky_v = vld1q_f32(dky+i);
-      vst1q_f32(dky+i, vmulq_n_f32(dky_v, s));
-      //float32x4_t yh_v = vld1q_f32(yh[jp1]+i);
-      //vst1q_f32(dky+i, vmulq_n_f32(dky_v, s) + vmulq_n_f32(yh_v, c));
+      __m128 dky_v = _mm_load_ps(dky+i);
+      _mm_store_ps(
+          dky+i,
+          _mm_mul_ps(dky_v, _mm_set_ps(s, s, s, s))
+          );
 
       dky[i] += c*yh[i][jp1];
       dky[i+1] += c*yh[i+1][jp1];
@@ -103,8 +107,11 @@ void sintdy(
   
   float r = pow(h, -k);
   for (int i = 0; i < n; i+=4) {
-    float32x4_t dky_v = vld1q_f32(dky+i);
-    vst1q_f32(dky+i, vmulq_n_f32(dky_v, r));
+    __m128 dky_v = _mm_load_ps(dky+i);
+    _mm_store_ps(
+        dky+i,
+        _mm_mul_ps(dky_v, _mm_set_ps(r, r, r, r))
+        );
   }
 
   return;
